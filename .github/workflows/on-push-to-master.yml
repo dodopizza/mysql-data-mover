@@ -1,0 +1,68 @@
+name: Push to master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Push to master
+    runs-on: ubuntu-18.04
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set common vars
+        id: common_vars
+        run: |
+          version_prefix=$(cat ./src/Dodo.DataMover/Dodo.DataMover.csproj | grep "<VersionPrefix>" | sed -e "s/ *<\/*VersionPrefix>//g")
+          version_suffix="${{ github.run_number }}"
+          if [ -z "${version_prefix}" ]; then exit 1; fi
+          app_version="${version_prefix}.${version_suffix}"
+          echo "app_version: ${app_version}"
+          echo "::set-output name=app_version::${app_version}"
+
+      - name: Build image
+        uses: docker/build-push-action@v1
+        with:
+          push: false
+          repository: dodopizza/mysql-data-mover
+          tags: ${{ steps.common_vars.outputs.app_version }}
+
+      - name: Integration test
+        timeout-minutes: 30
+        run: |
+          ./run-integration-tests.sh -t ${{ steps.common_vars.outputs.app_version }}
+
+      - name: Get binaries from builded image
+        run: |
+          mkdir ./output
+          id=$( docker create dodopizza/mysql-data-mover:${{ steps.common_vars.outputs.app_version }} )
+          docker cp $id:/app/ ./output
+          docker rm -v $id
+          ls -l ./output
+          cd ./output
+          zip -r ./mysql-data-mover.zip .
+
+      - name: Create draft release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.common_vars.outputs.app_version }}
+          release_name: Release v${{ steps.common_vars.outputs.app_version }}
+          draft: true
+          prerelease: false
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./output/mysql-data-mover.zip
+          asset_name: mysql-data-mover-${{ steps.common_vars.outputs.app_version }}.zip
+          asset_content_type: application/zip

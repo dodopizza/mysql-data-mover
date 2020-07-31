@@ -1,0 +1,42 @@
+version: "2.3"
+services:
+  mysql-data-mover-src:
+    image: mysql:5.7
+    container_name: mysql-data-mover-src
+    ports:
+      - "33060:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mover
+    healthcheck:
+      test: /usr/bin/mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} -e "EXIT"
+      timeout: 10s
+      interval: 5s
+      retries: 10
+  mysql-data-mover-dst:
+    image: mysql:5.7
+    container_name: mysql-data-mover-dst
+    ports:
+      - "33061:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mover
+    healthcheck:
+      test: /usr/bin/mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} -e "EXIT"
+      timeout: 10s
+      interval: 5s
+      retries: 10
+  mysql-data-mover-init:
+    image: mysql:5.7
+    container_name: mysql-data-mover-init
+    environment:
+      MYSQL_ROOT_PASSWORD: mover
+    entrypoint: /bin/bash
+    volumes:
+      - ./init.sql:/init.sql
+    command:
+      - -c
+      - mysql -h mysql-data-mover-src -u root -p$${MYSQL_ROOT_PASSWORD} < /init.sql;
+    depends_on:
+      mysql-data-mover-src:
+        condition: service_healthy
+      mysql-data-mover-dst:
+        condition: service_healthy

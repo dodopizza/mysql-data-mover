@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dodo.DataMover", "src\Dodo.DataMover\Dodo.DataMover.csproj", "{802C667E-F8B3-461F-9D9B-9BFE5FC2FE53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dodo.DataMover.Tests", "src\Dodo.DataMover.Tests\Dodo.DataMover.Tests.csproj", "{F9D772EF-9EF1-4595-8673-EDFEF1511446}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{802C667E-F8B3-461F-9D9B-9BFE5FC2FE53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{802C667E-F8B3-461F-9D9B-9BFE5FC2FE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{802C667E-F8B3-461F-9D9B-9BFE5FC2FE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{802C667E-F8B3-461F-9D9B-9BFE5FC2FE53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D772EF-9EF1-4595-8673-EDFEF1511446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D772EF-9EF1-4595-8673-EDFEF1511446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D772EF-9EF1-4595-8673-EDFEF1511446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D772EF-9EF1-4595-8673-EDFEF1511446}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

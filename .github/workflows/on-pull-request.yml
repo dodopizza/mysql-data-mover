@@ -1,0 +1,27 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Pull request
+    runs-on: ubuntu-18.04
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and test
+        uses: docker/build-push-action@v1
+        with:
+          push: false
+          repository: dodopizza/mysql-data-mover
+          tags: test
+          
+      - name: Integration test
+        timeout-minutes: 10
+        run: |
+          ./run-integration-tests.sh -t 'test'

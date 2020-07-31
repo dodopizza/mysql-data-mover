@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-18.04
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set common vars
+        id: common_vars
+        # Ex:
+        #   refs/tags/0.1.12345 -> 0.1.12345
+        run: |
+          app_version=$( echo ${{ github.ref }} | sed -n 's/refs\/tags\/\(.*\)/\1/p' )
+          if [ -z "${app_version}" ]; then exit 1; fi
+          echo "app_version: ${app_version}"
+          echo "::set-output name=app_version::${app_version}"
+
+      - name: Build and push image
+        uses: docker/build-push-action@v1
+        with:
+          push: true
+          username: ${{ secrets.DOCKERHUB_REGISTRY_USER }}
+          password: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
+          repository: dodopizza/mysql-data-mover
+          tags: ${{ steps.common_vars.outputs.app_version }}
