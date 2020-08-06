@@ -1,4 +1,4 @@
-FROM dodopizza/mysql-data-mover-platforms:latest as builder
+FROM dodopizza/mysql-data-mover-platforms as builder
 
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 WORKDIR /app
