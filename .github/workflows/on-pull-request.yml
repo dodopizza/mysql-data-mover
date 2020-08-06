@@ -20,15 +20,15 @@ jobs:
           dockerfile: platforms.Dockerfile
           push: false
           repository: dodopizza/mysql-data-mover-platforms
-          tags: test
+          tags: test,latest
 
       - name: Build linux image
-          uses: docker/build-push-action@v1
-          with:
-            dockerfile: linux.Dockerfile
-            push: false
-            repository: dodopizza/mysql-data-mover
-            tags: test
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: linux.Dockerfile
+          push: false
+          repository: dodopizza/mysql-data-mover
+          tags: test,latest
 
       - name: Integration test
         timeout-minutes: 10
