@@ -9,3 +9,4 @@ RUN dotnet publish -r linux-x64 /p:PublishSingleFile=true -c Release --output ./
     dotnet publish -r linux-musl-x64 /p:PublishSingleFile=true -c Release --output ./output/linux-musl-x64 ${SOLUTION_NAME} && \
     dotnet publish -r win-x64 /p:PublishSingleFile=true -c Release --output ./output/win-x64 ${SOLUTION_NAME} && \
     dotnet publish -r osx-x64 /p:PublishSingleFile=true -c Release --output ./output/osx-x64 ${SOLUTION_NAME}
+# kick the build 2020-08-06 15:32
