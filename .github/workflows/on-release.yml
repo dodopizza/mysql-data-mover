@@ -23,11 +23,20 @@ jobs:
           echo "app_version: ${app_version}"
           echo "::set-output name=app_version::${app_version}"
 
+      - name: Build for platforms
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: platforms.Dockerfile
+          push: false
+          repository: dodopizza/mysql-data-mover-platforms
+          tags: latest
+
       - name: Build and push image
         uses: docker/build-push-action@v1
         with:
+          dockerfile: linux.Dockerfile
           push: true
+          repository: dodopizza/mysql-data-mover
+          tags: ${{ steps.common_vars.outputs.app_version }}-linux-x64
           username: ${{ secrets.DOCKERHUB_REGISTRY_USER }}
           password: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
-          repository: dodopizza/mysql-data-mover
-          tags: ${{ steps.common_vars.outputs.app_version }}

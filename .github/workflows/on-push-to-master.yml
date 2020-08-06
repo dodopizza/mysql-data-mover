@@ -24,27 +24,36 @@ jobs:
           echo "app_version: ${app_version}"
           echo "::set-output name=app_version::${app_version}"
 
-      - name: Build image
+      - name: Build for platforms
         uses: docker/build-push-action@v1
         with:
+          dockerfile: platforms.Dockerfile
+          push: false
+          repository: dodopizza/mysql-data-mover-platforms
+          tags: latest
+
+      - name: Build linux image
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: linux.Dockerfile
           push: false
           repository: dodopizza/mysql-data-mover
-          tags: ${{ steps.common_vars.outputs.app_version }}
+          tags: ${{ steps.common_vars.outputs.app_version }}-linux-x64
 
       - name: Integration test
         timeout-minutes: 30
         run: |
-          ./run-integration-tests.sh -t ${{ steps.common_vars.outputs.app_version }}
+          ./run-integration-tests.sh -t ${{ steps.common_vars.outputs.app_version }}-linux-x64
 
-      - name: Get binaries from builded image
+      - name: Get binaries from built image
         run: |
           mkdir ./output
-          id=$( docker create dodopizza/mysql-data-mover:${{ steps.common_vars.outputs.app_version }} )
-          docker cp $id:/app/ ./output
+          id=$( docker create dodopizza/mysql-data-mover-platforms:latest )
+          docker cp $id:/app/output/linux-x64/ ./output
           docker rm -v $id
           ls -l ./output
           cd ./output
-          zip -r ./mysql-data-mover.zip .
+          zip -r ./mysql-data-mover.linux-x64.zip .
 
       - name: Create draft release
         id: create_release
@@ -63,6 +72,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./output/mysql-data-mover.zip
-          asset_name: mysql-data-mover-${{ steps.common_vars.outputs.app_version }}.zip
+          asset_path: ./output/mysql-data-mover.linux-x64.zip
+          asset_name: mysql-data-mover-${{ steps.common_vars.outputs.app_version }}.linux-x64.zip
           asset_content_type: application/zip
