@@ -23,12 +23,12 @@ jobs:
           tags: test
 
       - name: Build linux image
-          uses: docker/build-push-action@v1
-          with:
-            dockerfile: linux.Dockerfile
-            push: false
-            repository: dodopizza/mysql-data-mover
-            tags: test
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: linux.Dockerfile
+          push: false
+          repository: dodopizza/mysql-data-mover
+          tags: test
 
       - name: Integration test
         timeout-minutes: 10
