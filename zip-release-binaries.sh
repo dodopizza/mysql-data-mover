@@ -1,8 +1,7 @@
 rid=$1
-ver=$2
-mkdir ./output
 id=$( docker create dodopizza/mysql-data-mover-platforms:latest )
-docker cp $id:/output/ ./output
+mkdir -p ./output
+docker cp $id:/output/${rid} ./output/${rid}
 docker rm -v $id
-ls -l ./output
-zip -r ./output/mysql-data-mover_$ver_$rid.zip ./output/$rid
+ls -l ./output/${rid}
+zip -r ./output/mysql-data-mover_${rid}.zip ./output/${rid}
