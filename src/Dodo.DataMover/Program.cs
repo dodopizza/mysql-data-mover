@@ -81,7 +81,7 @@ namespace Dodo.DataMover
             var configurationFilePath = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)
-                .Build().GetSection("DataMover").GetValue<string>("ConfigurationFilePath");
+                .Build().GetSection("DataMover")?.GetValue<string>("ConfigurationFilePath");
             if (configurationFilePath != null)
             {
                 var resolvedPath = Path.IsPathRooted(configurationFilePath)
