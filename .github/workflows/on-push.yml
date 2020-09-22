@@ -18,6 +18,6 @@ jobs:
       - name: Build and test
         uses: docker/build-push-action@v2
         with:
-          file: linux.Dockerfile
+          file: verification.Dockerfile
           push: false
           tags: dodopizza/mysql-data-mover:test
