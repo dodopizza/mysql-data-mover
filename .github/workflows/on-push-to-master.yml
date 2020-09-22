@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./output/mysql-data-mover_linux-x64.zip
+          asset_path: ./mysql-data-mover/mysql-data-mover_linux-x64.zip
           asset_name: mysql-data-mover_linux-x64.zip
           asset_content_type: application/zip
 
@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./output/mysql-data-mover_linux-musl-x64.zip
+          asset_path: ./mysql-data-mover/mysql-data-mover_linux-musl-x64.zip
           asset_name: mysql-data-mover_linux-musl-x64.zip
           asset_content_type: application/zip
 
@@ -89,7 +89,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./output/mysql-data-mover_win-x64.zip
+          asset_path: ./mysql-data-mover/mysql-data-mover_win-x64.zip
           asset_name: mysql-data-mover_win-x64.zip
           asset_content_type: application/zip
 
@@ -99,6 +99,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./output/mysql-data-mover_osx-x64.zip
+          asset_path: ./mysql-data-mover/mysql-data-mover_osx-x64.zip
           asset_name: mysql-data-mover_osx-x64.zip
           asset_content_type: application/zip

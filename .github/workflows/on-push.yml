@@ -16,8 +16,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build and test
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
+          file: verification.Dockerfile
           push: false
-          repository: dodopizza/mysql-data-mover
-          tags: test
+          tags: dodopizza/mysql-data-mover:test
