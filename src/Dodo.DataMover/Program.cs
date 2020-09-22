@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,13 @@ namespace Dodo.DataMover
 
         private static async Task<int> Main(string[] args)
         {
+            var helpSwitches = new[] {"-h", "--help", "/?"};
+            if (args.Any(helpSwitches.Contains))
+            {
+                await DisplayUsage();
+                Environment.Exit(0);
+            }
+
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var configuration = Configure(environmentName, args);
             try
@@ -38,43 +47,60 @@ namespace Dodo.DataMover
             }
         }
 
+        private static async Task DisplayUsage()
+        {
+            var text = @"USAGE: ./Dodo.DataMover [options]
+            {-h, --help, /?} - displays this text
+            ConfigurationFilePath=<path> - optional json file path.
+            For the complete schema see https://github.com/dodopizza/mysql-data-mover
+";
+            await Console.Out.WriteLineAsync(text);
+        }
+
         private static IConfigurationRoot Configure(string environmentName, string[] args)
         {
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{environmentName}.json", true, true)
-                .AddEnvironmentVariables()
-                .AddCommandLine(args);
+            var builder = new ConfigurationBuilder();
+
+            builder.AddJsonFile("appsettings.json", false, true);
+            builder.AddJsonFile($"appsettings.{environmentName}.json", true, true);
+
+            AddOptionalConfigurationFileOverride(args, builder);
+
+            builder.AddEnvironmentVariables();
+            builder.AddCommandLine(args);
 
             var configuration = builder.Build();
 
-            ConfigureLogging(configuration, environmentName);
+            ConfigureLogging(configuration);
 
             return configuration;
         }
 
-        private static void ConfigureLogging(IConfigurationRoot configuration, string environmentName)
+        private static void AddOptionalConfigurationFileOverride(string[] args, ConfigurationBuilder builder)
         {
-            var isDevelopment = string.Equals(
-                environmentName,
-                "local",
-                StringComparison.OrdinalIgnoreCase);
-            var useJsonStdout = !isDevelopment;
+            var configurationFilePath = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .Build().GetSection("DataMover").GetValue<string>("ConfigurationFilePath");
+            if (configurationFilePath != null)
+            {
+                var resolvedPath = Path.IsPathRooted(configurationFilePath)
+                    ? configurationFilePath
+                    : Path.Combine(Directory.GetCurrentDirectory(), configurationFilePath);
+                builder.AddJsonFile(resolvedPath, false);
+            }
+        }
 
+        private static void ConfigureLogging(IConfigurationRoot configuration)
+        {
+            Log.CloseAndFlush();
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .Enrich.WithProperty("assemblyVersion", Version)
                 .WriteTo.Async(config =>
                 {
-                    if (useJsonStdout)
-                    {
-                        var formatter = new ExceptionAsObjectJsonFormatter(renderMessage: true, inlineFields: true);
-                        config.Console(formatter);
-                    }
-                    else
-                    {
-                        config.ColoredConsole();
-                    }
+                    var formatter = new ExceptionAsObjectJsonFormatter(renderMessage: true, inlineFields: true);
+                    config.Console(formatter);
                 })
                 .CreateLogger();
         }

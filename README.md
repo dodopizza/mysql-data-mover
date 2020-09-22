@@ -36,10 +36,40 @@ dotnet publish --configuration Release --output ./output "./src/Dodo.DataMover/D
 ASPNETCORE_ENVIRONMENT=local dotnet ./output/Dodo.DataMover.dll
 ```
 
+### How to run single-binary version
+
+In single-binary distribution, ASPNETCORE_ENVIRONMENT variable will not work.
+
+You can run the app with ConfigurationFilePath command line argument
+```sh
+./Dodo.DataMover DataMover__ConfigurationFilePath=<path>
+```
+
+.. or environment variable:
+```sh
+DataMover__ConfigurationFilePath=<path> ./Dodo.DataMover
+```
+
+The path to json config file can be relative to the working directory or rooted (full path).
+
 ## Configuration
 
 You may pass configuration options via environment variables or command line arguments,
 but more preferable way is using `appsettings.json` configuration file.
+
+### Alternative ways to set configuration
+Configuration is loaded in the following order, later setting overrides preceeding:
+- appsettings.json
+- appsettings.$ASPNETCORE_ENVIRONMENT.json (optional)
+- Custom json file, specified with DataMover__ConfigurationFilePath command line argument or environment variable.
+- Environment variables
+- Command line arguments
+
+In case of single-binary distribution, there is no way to specify appsettings.json or appsettings.$ASPNETCORE_ENVIRONMENT.json.
+In this case it is preferrable to use the DataMover__ConfigurationFilePath setting to specify the file configuration file.
+
+For command line and environment notation please refer to:
+https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1
 
 You may use [appsettings.local.template.json](src/Dodo.DataMover/appsettings.local.template.json) as template for you configuration.
 All configuration settings combined in `DataMover` object.
