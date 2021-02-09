@@ -79,8 +79,8 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE fill(OUT status CHAR)
 BEGIN
-    CALL fill_table_without_pk(@records);
-    CALL fill_table_with_composite_pk(@records);
+    -- CALL fill_table_without_pk(@records);
+    -- CALL fill_table_with_composite_pk(@records);
     SELECT 'INIT COMPLETE' AS status;
     CREATE USER 'ready'@'%' IDENTIFIED BY 'ready';
 END//

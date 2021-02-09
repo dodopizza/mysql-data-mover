@@ -30,7 +30,7 @@ namespace Dodo.DataMover.DataManipulation
             var tables = await _schemaReader.GetTablesAsync(ct);
             if (!tables.Any())
             {
-                throw new Exception($"There are no tables in src database schema");
+                _logger.LogWarning("There are no tables in src database schema");
             }
 
             _logger.LogInformation("{@EventType}",
