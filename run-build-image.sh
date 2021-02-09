@@ -42,8 +42,15 @@ build-no-cache)
     DOCKER_BUILDKIT=1 docker build --rm \
         --progress=plain \
         --no-cache \
+        --tag dodopizza/mysql-data-mover-platforms:latest \
+        --file platforms.Dockerfile \
+        .
+
+    DOCKER_BUILDKIT=1 docker build --rm \
+        --progress=plain \
+        --no-cache \
         --tag ${repo}:${tag} \
-        --tag ${repo}:cache__ \
+        --file linux.Dockerfile \
         .
     ;;
 push)

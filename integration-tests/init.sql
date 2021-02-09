@@ -2,22 +2,22 @@ CREATE SCHEMA test_db;
 USE test_db;
 
 DROP TABLE IF EXISTS `table_without_pk`;
--- CREATE TABLE `table_without_pk`
--- (
---     `Created` timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     `Message` varchar(1000)
--- ) ENGINE = InnoDB;
+CREATE TABLE `table_without_pk`
+(
+    `Created` timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `Message` varchar(1000)
+) ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS table_with_composite_pk;
--- CREATE TABLE `table_with_composite_pk`
--- (
---     `id_1`    bigint      NOT NULL,
---     `id_2`    bigint      NOT NULL,
---     `message` varchar(20) NOT NULL,
---     PRIMARY KEY (`id_1`, `id_2`)
--- ) ENGINE = InnoDB
---   DEFAULT CHARSET = utf8;
+CREATE TABLE `table_with_composite_pk`
+(
+    `id_1`    bigint      NOT NULL,
+    `id_2`    bigint      NOT NULL,
+    `message` varchar(20) NOT NULL,
+    PRIMARY KEY (`id_1`, `id_2`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 DELIMITER //
 CREATE PROCEDURE fill_table_with_composite_pk(OUT records INT)
