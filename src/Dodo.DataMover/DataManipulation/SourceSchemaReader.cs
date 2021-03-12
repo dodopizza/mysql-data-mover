@@ -237,7 +237,7 @@ namespace Dodo.DataMover.DataManipulation
             CancellationToken token)
         {
             return db.ReadAsync(databaseName,
-                @"SELECT c.TABLE_NAME, c.COLUMN_NAME, c.COLUMN_TYPE, c.DATA_TYPE, c.EXTRA, c.ORDINAL_POSITION as COLUMN_ORDINAL_POSITION, k.ORDINAL_POSITION as PK_ORDINAL_POSITION
+                @"SELECT DISTINCT c.TABLE_NAME, c.COLUMN_NAME, c.COLUMN_TYPE, c.DATA_TYPE, c.EXTRA, c.ORDINAL_POSITION as COLUMN_ORDINAL_POSITION, k.ORDINAL_POSITION as PK_ORDINAL_POSITION
 FROM information_schema.columns c
 LEFT JOIN information_schema.key_column_usage k
 ON c.TABLE_NAME = k.TABLE_NAME and c.TABLE_SCHEMA = k.TABLE_SCHEMA and c.COLUMN_NAME = k.COLUMN_NAME and k.CONSTRAINT_NAME='PRIMARY'
