@@ -207,7 +207,7 @@ namespace Dodo.DataMover.DataManipulation
             CancellationToken token)
         {
             return (await db.ReadAsync(databaseName,
-                    "select TABLE_NAME from information_schema.TABLES where TABLE_TYPE = 'BASE TABLE' and TABLE_SCHEMA = @databaseName",
+                    "select distinct TABLE_NAME from information_schema.TABLES where TABLE_TYPE = 'BASE TABLE' and TABLE_SCHEMA = @databaseName",
                     (dbName, parameters) => parameters.AddWithValue("databaseName", dbName),
                     (_, reader) => new TableDto
                     {
