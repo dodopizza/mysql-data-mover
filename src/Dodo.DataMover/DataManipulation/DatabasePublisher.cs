@@ -79,7 +79,7 @@ namespace Dodo.DataMover.DataManipulation
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "{@EventType}", "Insert_Failed");
+                _logger.LogError(e, "{@EventType} {@CommandText}", "Insert_Failed", cmd.CommandText);
                 await tx.RollbackAsync(token);
                 throw;
             }

@@ -193,7 +193,7 @@ namespace Dodo.DataMover.DataManipulation
 
             var dbName = new MySqlConnectionStringBuilder(_dataMoverSettings.ConnectionStrings.Src).Database;
 
-            var sql = @"select TABLE_NAME as Name, 'table' as Type
+            var sql = @"select distinct TABLE_NAME as Name, 'table' as Type
 from information_schema.TABLES
 where TABLE_TYPE = 'BASE TABLE' and TABLE_SCHEMA = @databaseName
 union
