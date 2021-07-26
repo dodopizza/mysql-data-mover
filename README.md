@@ -95,6 +95,8 @@ The following table lists the configurable parameters and their default values.
 | `SqlMode`                         | May contain string with comma separated sql modes, for example `STRICT_ALL_TABLES`. Do not set it at config, if you want null value.                            | `null`  |
 | `DebugDelaySeconds`               | Delay for debug purposes, used in schema read and insert operations                                                                                             | `0`     |
 | `SkipColumnsRegexes`              | Map, where key - regex to select table, and value - array of column names, which values will be skipped. For example, `"supplycomposition": ["ModifiedUserId"]` | `{}`    |
+| `DatabaseCollation`               | Override destination database collation. If not set, source database collation is used.                                                                         | `null`  |
+| `DatabaseCharacterSet`            | Override destination database character set. If not set, source database character set is used.                                                                 | `null`  |
 | `CreateSchema`                    | If true, then create schema (tables, views, routines, triggers) on destination database.                                                                        | `true`  |
 | `ConnectionStrings.Src`           | _Required_ Connection string to source database                                                                                                                 | `null`  |
 | `ConnectionStrings.Dst`           | _Required_ Connection string to destination database                                                                                                            | `null`  |
