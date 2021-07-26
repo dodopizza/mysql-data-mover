@@ -6,7 +6,7 @@ CREATE TABLE `table_without_pk`
 (
     `Created` timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `Message` varchar(1000)
-) ENGINE = InnoDB;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS table_with_composite_pk;
@@ -79,8 +79,8 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE fill(OUT status CHAR)
 BEGIN
-    -- CALL fill_table_without_pk(@records);
-    -- CALL fill_table_with_composite_pk(@records);
+    CALL fill_table_without_pk(@records);
+    CALL fill_table_with_composite_pk(@records);
     SELECT 'INIT COMPLETE' AS status;
     CREATE USER 'ready'@'%' IDENTIFIED BY 'ready';
 END//

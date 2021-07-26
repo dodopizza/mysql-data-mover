@@ -143,6 +143,10 @@ namespace Dodo.DataMover
 
         public int RetryInitialDelaySeconds { get; set; } = 3;
         public int RetryCount { get; set; } = 5;
+
+        public string DatabaseCollation { get; set; } = null;
+
+        public string DatabaseCharacterSet { get; set; } = null;
     }
 
 
