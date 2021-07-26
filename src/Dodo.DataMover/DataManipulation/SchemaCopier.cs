@@ -88,6 +88,8 @@ namespace Dodo.DataMover.DataManipulation
 
         private async Task CreateDatabaseSchemaAsync(CancellationToken token)
         {
+            var databaseMetadata = await ReadDatabaseMetadataAsync(token);
+
             var dstConnectionStringBuilder = new MySqlConnectionStringBuilder(_dataMoverSettings.ConnectionStrings.Dst);
             var databaseName = dstConnectionStringBuilder.Database;
             dstConnectionStringBuilder.Database = null;
@@ -99,18 +101,6 @@ namespace Dodo.DataMover.DataManipulation
 
             cmd.CommandType = CommandType.Text;
 
-            var collation = "";
-            if (!string.IsNullOrEmpty(_dataMoverSettings.DatabaseCollation))
-            {
-                collation = $" COLLATE {_dataMoverSettings.DatabaseCollation}";
-            }
-
-            var characterSet = "";
-            if (!string.IsNullOrEmpty(_dataMoverSettings.DatabaseCharacterSet))
-            {
-                characterSet = $" CHARACTER SET {_dataMoverSettings.DatabaseCharacterSet}";
-            }
-
             cmd.CommandText = "";
             if (_dataMoverSettings.DropDatabase)
             {
@@ -118,7 +108,10 @@ namespace Dodo.DataMover.DataManipulation
                     $"DROP DATABASE IF EXISTS `{databaseName}`;";
             }
 
-            cmd.CommandText += $"CREATE DATABASE IF NOT EXISTS `{databaseName}` {characterSet} {collation};";
+            var collation = _dataMoverSettings.DatabaseCollation ?? databaseMetadata.Collation;
+            var characterSet = _dataMoverSettings.DatabaseCharacterSet ?? databaseMetadata.CharacterSet;
+
+            cmd.CommandText += $"CREATE DATABASE IF NOT EXISTS `{databaseName}` CHARACTER SET {characterSet} COLLATE {collation};";
             cmd.CommandTimeout = _dataMoverSettings.SchemaReadCommandTimeoutSeconds;
 
             await cmd.ExecuteNonQueryAsync(token);
@@ -195,6 +188,27 @@ namespace Dodo.DataMover.DataManipulation
                 _logger.LogDebug("{@EventType}", $"Delay for {_dataMoverSettings.DebugDelaySeconds} sec");
                 await Task.Delay(TimeSpan.FromSeconds(_dataMoverSettings.DebugDelaySeconds), token);
             }
+        }
+
+        private async Task<DatabaseMatadataDto> ReadDatabaseMetadataAsync(CancellationToken token)
+        {
+            var db = new DatabaseGateway(_dataMoverSettings.ConnectionStrings.Src,
+                _dataMoverSettings.SchemaReadCommandTimeoutSeconds, _policyFactory.SrcPolicy);
+
+            var dbName = new MySqlConnectionStringBuilder(_dataMoverSettings.ConnectionStrings.Src).Database;
+
+            var sql = @"select distinct DEFAULT_CHARACTER_SET_NAME as CharacterSet, DEFAULT_COLLATION_NAME as Collation
+from information_schema.SCHEMATA
+where SCHEMA_NAME = @databaseName;";
+
+            return (await db.ReadAsync(default(Unused), sql,
+                (_, collection) => collection.AddWithValue("databaseName", dbName),
+                (_, reader) => new DatabaseMatadataDto
+                {
+                    CharacterSet = reader.GetString("CharacterSet"),
+                    Collation = reader.GetString("Collation")
+                },
+                token)).Single();
         }
 
         private async Task<List<DatabaseObjectDto>> ReadMetadataAsync(CancellationToken token)
