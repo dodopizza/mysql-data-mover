@@ -98,16 +98,27 @@ namespace Dodo.DataMover.DataManipulation
             var cmd = connection.CreateCommand();
 
             cmd.CommandType = CommandType.Text;
+
+            var collation = "";
+            if (!string.IsNullOrEmpty(_dataMoverSettings.DatabaseCollation))
+            {
+                collation = $" COLLATE {_dataMoverSettings.DatabaseCollation}";
+            }
+
+            var characterSet = "";
+            if (!string.IsNullOrEmpty(_dataMoverSettings.DatabaseCharacterSet))
+            {
+                characterSet = $" CHARACTER SET {_dataMoverSettings.DatabaseCharacterSet}";
+            }
+
+            cmd.CommandText = "";
             if (_dataMoverSettings.DropDatabase)
             {
                 cmd.CommandText =
-                    $"DROP DATABASE IF EXISTS `{databaseName}`; CREATE DATABASE IF NOT EXISTS `{databaseName}`;";
-            }
-            else
-            {
-                cmd.CommandText = $"CREATE DATABASE IF NOT EXISTS `{databaseName}`;";
+                    $"DROP DATABASE IF EXISTS `{databaseName}`;";
             }
 
+            cmd.CommandText += $"CREATE DATABASE IF NOT EXISTS `{databaseName}` {characterSet} {collation};";
             cmd.CommandTimeout = _dataMoverSettings.SchemaReadCommandTimeoutSeconds;
 
             await cmd.ExecuteNonQueryAsync(token);
