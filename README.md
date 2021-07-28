@@ -85,6 +85,7 @@ The following table lists the configurable parameters and their default values.
 | `ReadBatchSize`                   | Number of rows to read per one read command. Insert rows batch size depends on table columns count, and limited by 10000 insert parameters.                     | `5000`  |
 | `JobTimeoutMinutes`               | Maximum application execution time before failing by timeout                                                                                                    | `600`   |
 | `Limit`                           | Maximum number of rows to move from each table                                                                                                                  | `null`  |
+| `LimitOverrides`                  | Map, where key - regex to select table, and value - maximum number of rows to move for this table. For example, `"deliverylocalitiesstreets": 200000`           | `{}`    |
 | `InsertCommandTimeoutSeconds`     | Insert command timeout                                                                                                                                          | `30`    |
 | `DataReadCommandTimeoutSeconds`   | Read command timeout                                                                                                                                            | `30`    |
 | `SchemaReadCommandTimeoutSeconds` | Schema read command timeout                                                                                                                                     | `60`    |

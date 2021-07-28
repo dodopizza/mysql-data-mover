@@ -79,7 +79,7 @@ namespace Dodo.DataMover.DataManipulation
                 yield break;
             }
 
-            long? limit = _dataMoverSettings.Limit;
+            long? limit = GetLimitOverride(tableName) ?? _dataMoverSettings.Limit;
             foreach (var currentBatchSize in GetBatchSizes(limit, _dataMoverSettings.ReadBatchSize))
             {
                 if (ct.IsCancellationRequested)
@@ -101,6 +101,12 @@ namespace Dodo.DataMover.DataManipulation
                 }
             }
         }
+
+        private long? GetLimitOverride(string tableName) =>
+            _dataMoverSettings.LimitOverrides
+                .Where(entry => Regex.IsMatch(tableName, entry.Key))
+                .Select(entry => entry.Value)
+                .FirstOrDefault();
 
         string GenerateKeyRangeSelectSql(string tableName, List<object> from, List<string> pkNames)
         {

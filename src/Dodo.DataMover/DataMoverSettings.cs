@@ -73,6 +73,9 @@ namespace Dodo.DataMover
             }
         }
 
+        public Dictionary<string, long?> LimitOverrides { get; set; } =
+            new Dictionary<string, long?>();
+
         public int InsertCommandTimeoutSeconds
         {
             get => _insertCommandTimeoutSeconds;
