@@ -79,7 +79,11 @@ namespace Dodo.DataMover.DataManipulation
                 yield break;
             }
 
-            long? limit = _dataMoverSettings.Limit;
+            long? limitOverride = _dataMoverSettings.LimitOverrides
+                .Where(entry => Regex.IsMatch(tableName, entry.Key))
+                .Select(entry => entry.Value)
+                .FirstOrDefault();
+            long? limit = limitOverride ?? _dataMoverSettings.Limit;
             foreach (var currentBatchSize in GetBatchSizes(limit, _dataMoverSettings.ReadBatchSize))
             {
                 if (ct.IsCancellationRequested)
