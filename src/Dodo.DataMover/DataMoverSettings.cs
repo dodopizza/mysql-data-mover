@@ -16,6 +16,7 @@ namespace Dodo.DataMover
         private long? _limit;
         private int _readBatchSize = 5000;
         private int _readConcurrency = 1;
+        private int _maxInsertQueryParametersCount = 10000;
         private int _schemaReadCommandTimeoutSeconds = 60;
 
         public int ReadConcurrency
@@ -37,6 +38,17 @@ namespace Dodo.DataMover
                 if (value < 1) throw new ArgumentOutOfRangeException(nameof(value), value, "Must be positive integer");
 
                 _readBatchSize = value;
+            }
+        }
+
+        public int MaxInsertQueryParametersCount
+        {
+            get => _maxInsertQueryParametersCount;
+            set
+            {
+                if (value < 1) throw new ArgumentOutOfRangeException(nameof(value), value, "Must be positive integer");
+
+                _maxInsertQueryParametersCount = value;
             }
         }
 

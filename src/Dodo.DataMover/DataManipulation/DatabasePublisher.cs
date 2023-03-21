@@ -167,8 +167,7 @@ namespace Dodo.DataMover.DataManipulation
 
         private int GetPartitionSize(List<Column> columns)
         {
-            const int maxParametersCount = 10_000;
-            return maxParametersCount / columns.Count;
+            return _dataMoverSettings.MaxInsertQueryParametersCount / columns.Count;
         }
     }
 }
