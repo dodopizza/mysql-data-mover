@@ -76,31 +76,32 @@ All configuration settings combined in `DataMover` object.
 
 The following table lists the configurable parameters and their default values.
 
-| Parameter                         | Description                                                                                                                                                     | Default |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `RetryInitialDelaySeconds`        | Initial delay before linear backoff for command retries                                                                                                         | `3`     |
-| `RetryCount`                      | Max retry count before application raise error                                                                                                                  | `5`     |
-| `ReadConcurrency`                 | Number of parallel read tasks                                                                                                                                   | `1`     |
-| `InsertConcurrency`               | Number of parallel insert tasks                                                                                                                                 | `1`     |
-| `ReadBatchSize`                   | Number of rows to read per one read command. Insert rows batch size depends on table columns count, and limited by 10000 insert parameters.                     | `5000`  |
-| `JobTimeoutMinutes`               | Maximum application execution time before failing by timeout                                                                                                    | `600`   |
-| `Limit`                           | Maximum number of rows to move from each table                                                                                                                  | `null`  |
-| `LimitOverrides`                  | Map, where key - regex to select table, and value - maximum number of rows to move for this table. For example, `"deliverylocalitiesstreets": 200000`           | `{}`    |
-| `InsertCommandTimeoutSeconds`     | Insert command timeout                                                                                                                                          | `30`    |
-| `DataReadCommandTimeoutSeconds`   | Read command timeout                                                                                                                                            | `30`    |
-| `SchemaReadCommandTimeoutSeconds` | Schema read command timeout                                                                                                                                     | `60`    |
-| `DropDatabase`                    | If true, then drop destination database first                                                                                                                   | `false` |
-| `IncludeTableRegexes`             | Array of regular expressions, to include tables for moving data, has priority against ExcludeTableRegexes parameter                                             | `[]`    |
-| `ExcludeTableRegexes`             | Array of regular expressions, to exclude tables from moving data                                                                                                | `[]`    |
-| `InsertIgnore`                    | If true, then use `INSERT IGNORE` statement and ignore duplicate PK errors in inserting                                                                         | `false` |
-| `SqlMode`                         | May contain string with comma separated sql modes, for example `STRICT_ALL_TABLES`. Do not set it at config, if you want null value.                            | `null`  |
-| `DebugDelaySeconds`               | Delay for debug purposes, used in schema read and insert operations                                                                                             | `0`     |
-| `SkipColumnsRegexes`              | Map, where key - regex to select table, and value - array of column names, which values will be skipped. For example, `"supplycomposition": ["ModifiedUserId"]` | `{}`    |
-| `DatabaseCollation`               | Override destination database collation. If not set, source database collation is used.                                                                         | `null`  |
-| `DatabaseCharacterSet`            | Override destination database character set. If not set, source database character set is used.                                                                 | `null`  |
-| `CreateSchema`                    | If true, then create schema (tables, views, routines, triggers) on destination database.                                                                        | `true`  |
-| `ConnectionStrings.Src`           | _Required_ Connection string to source database                                                                                                                 | `null`  |
-| `ConnectionStrings.Dst`           | _Required_ Connection string to destination database                                                                                                            | `null`  |
+| Parameter                         | Description                                                                                                                                                           | Default |
+| --------------------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `RetryInitialDelaySeconds`        | Initial delay before linear backoff for command retries                                                                                                               | `3`     |
+| `RetryCount`                      | Max retry count before application raise error                                                                                                                        | `5`     |
+| `ReadConcurrency`                 | Number of parallel read tasks                                                                                                                                         | `1`     |
+| `InsertConcurrency`               | Number of parallel insert tasks                                                                                                                                       | `1`     |
+| `ReadBatchSize`                   | Number of rows to read per one read command. Insert rows batch size depends on table columns count, and limited by `MaxInsertQueryParametersCount` insert parameters. | `5000`  |
+| `MaxInsertQueryParametersCount`   | Maximum number of insert parameters at the insert batch statement.                                                                                                    | `10000` |
+| `JobTimeoutMinutes`               | Maximum application execution time before failing by timeout                                                                                                          | `600`   |
+| `Limit`                           | Maximum number of rows to move from each table                                                                                                                        | `null`  |
+| `LimitOverrides`                  | Map, where key - regex to select table, and value - maximum number of rows to move for this table. For example, `"deliverylocalitiesstreets": 200000`                 | `{}`    |
+| `InsertCommandTimeoutSeconds`     | Insert command timeout                                                                                                                                                | `30`    |
+| `DataReadCommandTimeoutSeconds`   | Read command timeout                                                                                                                                                  | `30`    |
+| `SchemaReadCommandTimeoutSeconds` | Schema read command timeout                                                                                                                                           | `60`    |
+| `DropDatabase`                    | If true, then drop destination database first                                                                                                                         | `false` |
+| `IncludeTableRegexes`             | Array of regular expressions, to include tables for moving data, has priority against ExcludeTableRegexes parameter                                                   | `[]`    |
+| `ExcludeTableRegexes`             | Array of regular expressions, to exclude tables from moving data                                                                                                      | `[]`    |
+| `InsertIgnore`                    | If true, then use `INSERT IGNORE` statement and ignore duplicate PK errors in inserting                                                                               | `false` |
+| `SqlMode`                         | May contain string with comma separated sql modes, for example `STRICT_ALL_TABLES`. Do not set it at config, if you want null value.                                  | `null`  |
+| `DebugDelaySeconds`               | Delay for debug purposes, used in schema read and insert operations                                                                                                   | `0`     |
+| `SkipColumnsRegexes`              | Map, where key - regex to select table, and value - array of column names, which values will be skipped. For example, `"supplycomposition": ["ModifiedUserId"]`       | `{}`    |
+| `DatabaseCollation`               | Override destination database collation. If not set, source database collation is used.                                                                               | `null`  |
+| `DatabaseCharacterSet`            | Override destination database character set. If not set, source database character set is used.                                                                       | `null`  |
+| `CreateSchema`                    | If true, then create schema (tables, views, routines, triggers) on destination database.                                                                              | `true`  |
+| `ConnectionStrings.Src`           | _Required_ Connection string to source database                                                                                                                       | `null`  |
+| `ConnectionStrings.Dst`           | _Required_ Connection string to destination database                                                                                                                  | `null`  |
 
 ## How to develop
 
