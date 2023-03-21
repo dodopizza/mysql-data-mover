@@ -77,13 +77,13 @@ All configuration settings combined in `DataMover` object.
 The following table lists the configurable parameters and their default values.
 
 | Parameter                         | Description                                                                                                                                                           | Default |
-| --------------------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------- |
+| --------------------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
 | `RetryInitialDelaySeconds`        | Initial delay before linear backoff for command retries                                                                                                               | `3`     |
 | `RetryCount`                      | Max retry count before application raise error                                                                                                                        | `5`     |
 | `ReadConcurrency`                 | Number of parallel read tasks                                                                                                                                         | `1`     |
 | `InsertConcurrency`               | Number of parallel insert tasks                                                                                                                                       | `1`     |
 | `ReadBatchSize`                   | Number of rows to read per one read command. Insert rows batch size depends on table columns count, and limited by `MaxInsertQueryParametersCount` insert parameters. | `5000`  |
-| `MaxInsertQueryParametersCount`   | Maximum number of insert parameters at the insert batch statement.                                                                                                    | `5000`  |
+| `MaxInsertQueryParametersCount`   | Maximum number of insert parameters at the insert batch statement.                                                                                                    | `10000` |
 | `JobTimeoutMinutes`               | Maximum application execution time before failing by timeout                                                                                                          | `600`   |
 | `Limit`                           | Maximum number of rows to move from each table                                                                                                                        | `null`  |
 | `LimitOverrides`                  | Map, where key - regex to select table, and value - maximum number of rows to move for this table. For example, `"deliverylocalitiesstreets": 200000`                 | `{}`    |
