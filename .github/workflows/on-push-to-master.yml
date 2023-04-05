@@ -22,7 +22,7 @@ jobs:
           if [ -z "${version_prefix}" ]; then exit 1; fi
           app_version="${version_prefix}.${version_suffix}"
           echo "app_version: ${app_version}"
-          echo "::set-output name=app_version::${app_version}"
+          echo "app_version=${app_version}" >> $GITHUB_OUTPUT
 
       - name: Build for platforms
         uses: docker/build-push-action@v1

@@ -21,7 +21,7 @@ jobs:
           app_version=$( echo ${{ github.ref }} | sed -n 's/refs\/tags\/\(.*\)/\1/p' )
           if [ -z "${app_version}" ]; then exit 1; fi
           echo "app_version: ${app_version}"
-          echo "::set-output name=app_version::${app_version}"
+          echo "app_version=${app_version}" >> $GITHUB_OUTPUT
 
       - name: Build for platforms
         uses: docker/build-push-action@v1
