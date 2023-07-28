@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,11 @@ namespace Dodo.DataMover
                 Log.Debug("Running...");
                 await app.RunAsync();
                 return 0;
+            }
+            catch (TargetInvocationException tex)
+            {
+                Log.Error(tex.InnerException, "{@EventType}", "Main_Failed");
+                return 1;
             }
             catch (Exception ex)
             {
