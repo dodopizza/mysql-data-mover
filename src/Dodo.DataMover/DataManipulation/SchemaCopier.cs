@@ -49,6 +49,8 @@ namespace Dodo.DataMover.DataManipulation
                     try
                     {
                         var swRead = Stopwatch.StartNew();
+                        _logger.LogDebug(
+                            $"SchemaCopier. Starting Read. Database Object: {current.dto.Type} {current.dto.Name}");
                         var script = await _policyFactory.SrcPolicy.ExecuteAsync(async ct =>
                             await GetScriptAsync(current.dto, ct), token);
                         swRead.Stop();
