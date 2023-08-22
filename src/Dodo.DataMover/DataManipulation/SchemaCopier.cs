@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Dodo.DataMover.DataManipulation.DatabaseMapping;
 using Dodo.DataMover.DataManipulation.Models;
 using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 namespace Dodo.DataMover.DataManipulation
 {
@@ -225,10 +225,6 @@ union
 select TABLE_NAME as Name, 'view' as Type
 from information_schema.TABLES
 where TABLE_TYPE = 'VIEW' and TABLE_SCHEMA = @databaseName
-union
-select ROUTINE_NAME, 'function' as Type
-from information_schema.ROUTINES
-where ROUTINE_TYPE = 'FUNCTION' and ROUTINE_SCHEMA = @databaseName
 union
 select ROUTINE_NAME, 'procedure' as Type
 from information_schema.ROUTINES
