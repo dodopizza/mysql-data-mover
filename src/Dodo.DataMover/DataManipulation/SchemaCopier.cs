@@ -78,8 +78,11 @@ namespace Dodo.DataMover.DataManipulation
             foreach (var script in scripts)
             {
                 var swWrite = Stopwatch.StartNew();
-                await _policyFactory.DstPolicy.ExecuteAsync(async ct =>
-                    await ExecuteScriptAsync(SanitizeQueryScript(script), ct), token);
+                await _policyFactory.DstPolicy.ExecuteAsync(async ct => {
+                    var sanitizedScript = SanitizeQueryScript(script);
+                    _logger.LogDebug($"Executing schema script:{Environment.NewLine}{sanitizedScript}{Environment.NewLine}");
+                    await ExecuteScriptAsync(sanitizedScript, ct);
+                }, token);
                 swWrite.Stop();
                 _logger.LogDebug(
                     $"SchemaCopier. Write: {swWrite.Elapsed.Milliseconds}");
