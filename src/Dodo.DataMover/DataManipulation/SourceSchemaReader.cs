@@ -249,7 +249,7 @@ LEFT JOIN information_schema.key_column_usage k
 ON c.TABLE_NAME = k.TABLE_NAME and c.TABLE_SCHEMA = k.TABLE_SCHEMA and c.COLUMN_NAME = k.COLUMN_NAME and k.CONSTRAINT_NAME='PRIMARY'
 LEFT JOIN information_schema.table_constraints t
 ON k.TABLE_NAME = t.TABLE_NAME and k.TABLE_SCHEMA = t.TABLE_SCHEMA and t.CONSTRAINT_NAME = k.CONSTRAINT_NAME and t.CONSTRAINT_TYPE='PRIMARY KEY'
-WHERE  c.TABLE_SCHEMA='menu' and c.EXTRA not in ('VIRTUAL GENERATED', 'STORED GENERATED');",
+WHERE  c.TABLE_SCHEMA=@databaseName and c.EXTRA not in ('VIRTUAL GENERATED', 'STORED GENERATED');",
                 (dbName, parameters) => parameters.AddWithValue("databaseName", dbName),
                 (_, reader) => new ColumnDto
                 {
