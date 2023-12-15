@@ -29,7 +29,6 @@ jobs:
         with:
           file: platforms.Dockerfile
           push: false
-          repository: 
           tags: dodopizza/mysql-data-mover-platforms:latest
 
       - name: Build linux image
