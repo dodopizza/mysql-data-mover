@@ -8,7 +8,17 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mover
     healthcheck:
-      test: /usr/bin/mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} -e "EXIT"
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-pmover",
+        ]
       timeout: 10s
       interval: 5s
       retries: 10
@@ -20,7 +30,17 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mover
     healthcheck:
-      test: /usr/bin/mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} -e "EXIT"
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-pmover",
+        ]
       timeout: 10s
       interval: 5s
       retries: 10
