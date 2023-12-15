@@ -29,8 +29,8 @@ jobs:
           file: linux.Dockerfile
           push: false
           tags: |
-            dodopizza/mysql-data-mover-platforms:test
-            dodopizza/mysql-data-mover-platforms:latest
+            dodopizza/mysql-data-mover:test
+            dodopizza/mysql-data-mover:latest
 
       - name: Integration test
         timeout-minutes: 10
