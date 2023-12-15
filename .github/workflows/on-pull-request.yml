@@ -12,23 +12,21 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build and test
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v5
         with:
-          dockerfile: platforms.Dockerfile
+          file: platforms.Dockerfile
           push: false
-          repository: dodopizza/mysql-data-mover-platforms
-          tags: test,latest
+          tags: dodopizza/mysql-data-mover-platforms:test,latest
 
       - name: Build linux image
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v5
         with:
-          dockerfile: linux.Dockerfile
+          file: linux.Dockerfile
           push: false
-          repository: dodopizza/mysql-data-mover
-          tags: test,latest
+          tags: dodopizza/mysql-data-mover:test,latest
 
       - name: Integration test
         timeout-minutes: 10

@@ -11,7 +11,7 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set common vars
         id: common_vars
@@ -24,19 +24,21 @@ jobs:
           echo "app_version=${app_version}" >> $GITHUB_OUTPUT
 
       - name: Build for platforms
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v5
         with:
-          dockerfile: platforms.Dockerfile
+          file: platforms.Dockerfile
           push: false
-          repository: dodopizza/mysql-data-mover-platforms
-          tags: latest
+          tags: dodopizza/mysql-data-mover-platforms:latest
 
-      - name: Build and push image
-        uses: docker/build-push-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          dockerfile: linux.Dockerfile
-          push: true
-          repository: dodopizza/mysql-data-mover
-          tags: ${{ steps.common_vars.outputs.app_version }}-linux-x64
           username: ${{ secrets.DOCKERHUB_REGISTRY_USER }}
           password: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          file: linux.Dockerfile
+          push: true
+          tags: dodopizza/mysql-data-mover:${{ steps.common_vars.outputs.app_version }}-linux-x64
