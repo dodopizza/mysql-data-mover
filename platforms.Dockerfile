@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0.407-bullseye-slim as builder
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy as builder
 COPY src ./src
 COPY mysql-data-mover.sln .
 ENV SOLUTION_NAME "./mysql-data-mover.sln"

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Dodo.DataMover.DataManipulation.DatabaseMapping;
 using Dodo.DataMover.DataManipulation.Models;
 using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 namespace Dodo.DataMover.DataManipulation
 {
