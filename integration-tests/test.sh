@@ -99,7 +99,7 @@ function mysql::start_and_wait() {
 function mysql::wait_for_init_data() {
     echo "[~] Wait for init data"
     until
-        $(docker exec $1 mysqladmin ping -uready -pready)
+        $(docker exec -e MYSQL_PWD=ready $1 mysqladmin ping -uready)
         [ "$?" -eq "0" ]
     do sleep 5; done
 }
