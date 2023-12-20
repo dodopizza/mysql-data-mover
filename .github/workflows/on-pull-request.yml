@@ -14,25 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build and test
-        uses: docker/build-push-action@v5
-        with:
-          file: platforms.Dockerfile
-          push: false
-          tags: |
-            dodopizza/mysql-data-mover-platforms:test
-            dodopizza/mysql-data-mover-platforms:latest
-
-      - name: Build linux image
-        uses: docker/build-push-action@v5
-        with:
-          file: linux.Dockerfile
-          push: false
-          tags: |
-            dodopizza/mysql-data-mover:test
-            dodopizza/mysql-data-mover:latest
-
       - name: Integration test
         timeout-minutes: 10
         run: |
-          ./run-integration-tests.sh -t 'test'
+          ./run-integration-tests.sh

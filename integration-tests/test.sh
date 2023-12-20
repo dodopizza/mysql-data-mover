@@ -98,9 +98,7 @@ function mysql::start_and_wait() {
 # Usage: mysql::wait_for_init_data
 function mysql::wait_for_init_data() {
     echo "[~] Wait for init data"
-    until
-        $(docker exec -e MYSQL_PWD=ready $1 mysqladmin ping -uready)
-        [ "$?" -eq "0" ]
+    until docker exec -e MYSQL_PWD=ready "$1" mysql -uready -e "EXIT"
     do sleep 5; done
 }
 
@@ -131,7 +129,7 @@ function main::setup() {
         ${REPO_DIR}/run-build-image.sh build integration-test
     fi
 
-    docker-compose up -d
+    docker-compose up -d --wait
     mysql::wait_for_init_data ${MYSQL_SRC}
     mysql::start_haos_monkey ${MYSQL_SRC} &
     mysql::start_haos_monkey ${MYSQL_DST} &

@@ -23,12 +23,10 @@ jobs:
           echo "app_version: ${app_version}"
           echo "app_version=${app_version}" >> $GITHUB_OUTPUT
 
-      - name: Build for platforms
-        uses: docker/build-push-action@v5
-        with:
-          file: platforms.Dockerfile
-          push: false
-          tags: dodopizza/mysql-data-mover-platforms:latest
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -39,6 +37,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
-          file: linux.Dockerfile
+          file: Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
-          tags: dodopizza/mysql-data-mover:${{ steps.common_vars.outputs.app_version }}-linux-x64
+          tags: dodopizza/mysql-data-mover:${{ steps.common_vars.outputs.app_version }}
