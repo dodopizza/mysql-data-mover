@@ -8,17 +8,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mover
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-pmover",
-        ]
+      test: /usr/bin/mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} -e "EXIT"
       timeout: 10s
       interval: 5s
       retries: 10
@@ -30,17 +20,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mover
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-pmover",
-        ]
+      test: /usr/bin/mysql -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} -e "EXIT"
       timeout: 10s
       interval: 5s
       retries: 10
@@ -48,13 +28,13 @@ services:
     image: mysql:8.0
     container_name: mysql-data-mover-init
     environment:
-      MYSQL_ROOT_PASSWORD: mover
+      MYSQL_PWD: mover
     entrypoint: /bin/bash
     volumes:
       - ./init.sql:/init.sql
     command:
       - -c
-      - mysql -h mysql-data-mover-src -u root -p$${MYSQL_ROOT_PASSWORD} < /init.sql;
+      - mysql -h mysql-data-mover-src -u root < /init.sql;
     depends_on:
       mysql-data-mover-src:
         condition: service_healthy
