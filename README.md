@@ -117,4 +117,4 @@ The following table lists the configurable parameters and their default values.
 There are two kinds of tests in project:
 
 - Unit tests at Dodo.DataMover.Tests. You may run them manually. Also unit tests run at Docker image build step (ex. `./run-build-image.sh build local-run`).
-- Integration tests are available at `run-integration-test.sh` script, can be run manually and as step of GitHub Actions pipeline.
+- Integration tests are available at `run-integration-tests.sh` script, can be run manually and as step of GitHub Actions pipeline.
