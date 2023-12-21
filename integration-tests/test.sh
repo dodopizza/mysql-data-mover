@@ -49,7 +49,7 @@ function app::kill_all_subprocesses() {
 
 # Usage: app::cleanup
 function app::cleanup() {
-    docker-compose down --volumes
+    docker compose down --volumes
 }
 
 # Usage: app::on_exit
@@ -77,9 +77,9 @@ function mysql:wait_for_start() {
 function mysql::start_haos_monkey() {
     local service_name=${1}
     while :; do
-        docker-compose stop ${service_name}
+        docker compose stop ${service_name}
         sleep $(utils::get_rand 0 15)
-        docker-compose start ${service_name}
+        docker compose start ${service_name}
         sleep $(utils::get_rand 30 60)
     done
 }
@@ -91,16 +91,14 @@ function mysql::stop_haos_monkey() {
 
 # Usage: mysql::start_and_wait <mysql_container_name>
 function mysql::start_and_wait() {
-    docker-compose start ${1}
+    docker compose start ${1}
     mysql:wait_for_start ${1}
 }
 
 # Usage: mysql::wait_for_init_data
 function mysql::wait_for_init_data() {
     echo "[~] Wait for init data"
-    until
-        $(docker exec $1 mysql -u ready -pready -e "EXIT")
-        [ "$?" -eq "0" ]
+    until docker exec -e MYSQL_PWD=ready "$1" mysql -uready -e "EXIT"
     do sleep 5; done
 }
 
@@ -131,7 +129,7 @@ function main::setup() {
         ${REPO_DIR}/run-build-image.sh build integration-test
     fi
 
-    docker-compose up -d
+    docker compose up -d --wait
     mysql::wait_for_init_data ${MYSQL_SRC}
     mysql::start_haos_monkey ${MYSQL_SRC} &
     mysql::start_haos_monkey ${MYSQL_DST} &

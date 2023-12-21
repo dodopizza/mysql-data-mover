@@ -24,17 +24,10 @@ build)
     DOCKER_BUILDKIT=1 docker build --rm \
         --progress=plain \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
-        --cache-from dodopizza/mysql-data-mover-platforms:latest \
-        --tag dodopizza/mysql-data-mover-platforms:latest \
-        --file platforms.Dockerfile \
-        .
-    DOCKER_BUILDKIT=1 docker build --rm \
-        --progress=plain \
-        --build-arg BUILDKIT_INLINE_CACHE=1 \
         --cache-from ${repo}:cache__ \
         --tag ${repo}:${tag} \
         --tag ${repo}:cache__ \
-        --file linux.Dockerfile \
+        --file Dockerfile \
         .
     ;;
 
@@ -42,15 +35,8 @@ build-no-cache)
     DOCKER_BUILDKIT=1 docker build --rm \
         --progress=plain \
         --no-cache \
-        --tag dodopizza/mysql-data-mover-platforms:latest \
-        --file platforms.Dockerfile \
-        .
-
-    DOCKER_BUILDKIT=1 docker build --rm \
-        --progress=plain \
-        --no-cache \
         --tag ${repo}:${tag} \
-        --file linux.Dockerfile \
+        --file Dockerfile \
         .
     ;;
 push)

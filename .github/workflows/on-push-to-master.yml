@@ -12,7 +12,7 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set common vars
         id: common_vars
@@ -24,33 +24,20 @@ jobs:
           echo "app_version: ${app_version}"
           echo "app_version=${app_version}" >> $GITHUB_OUTPUT
 
-      - name: Build for platforms
-        uses: docker/build-push-action@v1
-        with:
-          dockerfile: platforms.Dockerfile
-          push: false
-          repository: dodopizza/mysql-data-mover-platforms
-          tags: latest
-
-      - name: Build linux image
-        uses: docker/build-push-action@v1
-        with:
-          dockerfile: linux.Dockerfile
-          push: false
-          repository: dodopizza/mysql-data-mover
-          tags: ${{ steps.common_vars.outputs.app_version }}-linux-x64
-
       - name: Integration test
         timeout-minutes: 30
         run: |
-          ./run-integration-tests.sh -t ${{ steps.common_vars.outputs.app_version }}-linux-x64
+          ./run-integration-tests.sh
 
       - name: Get binaries from built image
         run: |
           ./zip-release-binaries.sh linux-x64
           ./zip-release-binaries.sh linux-musl-x64
+          ./zip-release-binaries.sh linux-arm64
           ./zip-release-binaries.sh win-x64
+          ./zip-release-binaries.sh win-arm64
           ./zip-release-binaries.sh osx-x64
+          ./zip-release-binaries.sh osx-arm64
 
       - name: Create draft release
         id: create_release
@@ -83,6 +70,16 @@ jobs:
           asset_name: mysql-data-mover_linux-musl-x64.zip
           asset_content_type: application/zip
 
+      - name: Upload linux-arm64 release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mysql-data-mover/mysql-data-mover_linux-arm64.zip
+          asset_name: mysql-data-mover_linux-arm64.zip
+          asset_content_type: application/zip
+
       - name: Upload win-x64 release asset
         uses: actions/upload-release-asset@v1
         env:
@@ -93,6 +90,16 @@ jobs:
           asset_name: mysql-data-mover_win-x64.zip
           asset_content_type: application/zip
 
+      - name: Upload win-arm64 release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mysql-data-mover/mysql-data-mover_win-arm64.zip
+          asset_name: mysql-data-mover_win-arm64.zip
+          asset_content_type: application/zip
+
       - name: Upload osx-x64 release asset
         uses: actions/upload-release-asset@v1
         env:
@@ -101,4 +108,14 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./mysql-data-mover/mysql-data-mover_osx-x64.zip
           asset_name: mysql-data-mover_osx-x64.zip
+          asset_content_type: application/zip
+
+      - name: Upload osx-arm64 release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mysql-data-mover/mysql-data-mover_osx-arm64.zip
+          asset_name: mysql-data-mover_osx-arm64.zip
           asset_content_type: application/zip

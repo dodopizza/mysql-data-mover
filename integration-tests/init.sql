@@ -6,7 +6,7 @@ CREATE TABLE `table_without_pk`
 (
     `Created` timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `Message` varchar(1000)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ENGINE = InnoDB;
 
 
 DROP TABLE IF EXISTS table_with_composite_pk;
@@ -17,7 +17,7 @@ CREATE TABLE `table_with_composite_pk`
     `message` varchar(20) NOT NULL,
     PRIMARY KEY (`id_1`, `id_2`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+  DEFAULT CHARSET = utf8mb4;
 
 DELIMITER //
 CREATE PROCEDURE fill_table_with_composite_pk(OUT records INT)
