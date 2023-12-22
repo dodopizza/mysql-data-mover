@@ -3,6 +3,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <NoWarn>NU1900</NoWarn> <!-- Fix linux/arm64 bug? error NU1900: Warning As Error: Error occurred while getting package vulnerability data: Unable to cast object of type 'System.Net.Http.HttpRequestMessage' to type 'System.Text.Json.Serialization.Metadata.JsonPropertyInfo' -->
 <!--        <ImplicitUsings>enable</ImplicitUsings>-->
 <!--        <Nullable>enable</Nullable>-->
     </PropertyGroup>
